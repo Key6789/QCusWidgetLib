@@ -60,17 +60,17 @@
     {
       "hidden": true,
       "name": "Qt-Default",
-      "inherits": "5.14.2_msvc2017",
+      "inherits": "5.14.2_msvc2017_64",
       "vendor": {
         "qt-project.org/Default": {
-          "checksum": "+8VNSkPwVs+VyKVoS7yEfjjiMSw="
+          "checksum": "qwjTNEov+Vp+pUKkZgUK4KP5rds="
         }
       }
     }
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "y7tZzRMXeQcBxmAPtTn3W59QQQM="
+      "checksum": "AVbWh/M5V7AkBuUWF2i40ZXFRUU="
     }
   }
 }

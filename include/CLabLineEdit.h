@@ -28,6 +28,8 @@ namespace QCUSWIDGETLIB
 		// 获取行编辑控件
 		QLineEdit* getLineEdit();
 
+		void setConnect(std::function<void(QString)> func);
+
 
 	private:
 		QLabel* m_label = nullptr;

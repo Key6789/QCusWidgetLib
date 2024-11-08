@@ -25,7 +25,8 @@ namespace QCUSWIDGETLIB
 		// 添加项目的函数，参数为项目字符串
 		void addItem(const QString& strItem);
 		void addItem(const QString& key, const QString& value);
-
+		void addItem(const QString& key, const int& value);
+		void addItem(const QString& key, const QVariant& value);
 		// 设置当前索引的函数，参数为索引整数
 		void setCurIndex(int nIndex);
 
@@ -37,6 +38,8 @@ namespace QCUSWIDGETLIB
 
 		// 清空所有项目的函数
 		void clear();
+
+		void setConnect(std::function<void(QString)> func);
 
 	signals:
 		void currentIndexChanged(int index);

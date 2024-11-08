@@ -44,6 +44,11 @@ namespace QCUSWIDGETLIB
 		return m_lineEdit;
 	}
 
+	void CLabLineEdit::setConnect(std::function<void(QString)> func)
+	{
+		QObject::connect(m_lineEdit, &QLineEdit::textChanged, [=]() {func(m_lineEdit->text()); });
+	}
+
 	CLabLineEditBtn::CLabLineEditBtn(QWidget* parent)
 	{
 		QHBoxLayout* layout = new QHBoxLayout(this);

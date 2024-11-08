@@ -23,6 +23,23 @@ namespace QCUSWIDGETLIB
 	private:
 		QVBoxLayout* m_pLayout = nullptr;
 	};
+	class QCUSWIDGETLIB_EXPORT CWidgetHLay : public QWidget
+	{
+		Q_OBJECT
+
+	public:
+		CWidgetHLay(QWidget* parent);
+		~CWidgetHLay();
+
+		void addWidget(QWidget* pWidget);
+		void removeWidget(QWidget* pWidget);
+		void clearLayout();
+		void addLayout(QLayout* pLayout);
+		void addStretch();
+
+	private:
+		QHBoxLayout* m_pLayout = nullptr;
+	};
 }
 
 

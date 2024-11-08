@@ -17,7 +17,13 @@
 #include <QRadioButton>
 
 #include <QColor>
-
+#include <QButtonGroup>
+#include <QChar>
+#include <QChart>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QtCharts>
+#include <QGraphicsScene>
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -42,6 +48,7 @@
 #include <QProgressDialog>
 #include <QDateTimeEdit>
 #include <QProgressBar>
+#include <QListWidget>
 
 #define __CSTRING_UTF8(x) QString::fromLocal8Bit(x)
 

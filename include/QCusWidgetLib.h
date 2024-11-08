@@ -9,6 +9,9 @@
 #include "CWidgetVLay.h"
 #include "CLabSpinBox.h"
 #include "ClabelProLabel.h"
+#include "CLabListWid.h"
+#include "CRadiobtns.h"
+#include "CLabChart.h"
 namespace QCUSWIDGETLIB
 {
 	class QCUSWIDGETLIB_EXPORT QCusWidgetLib

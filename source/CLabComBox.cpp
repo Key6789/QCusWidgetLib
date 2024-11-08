@@ -55,6 +55,16 @@ namespace QCUSWIDGETLIB
 		m_comBox->addItem(key, value);
 	}
 
+	void CLabComBox::addItem(const QString& key, const int& value)
+	{
+		m_comBox->addItem(key, value);
+	}
+
+	void CLabComBox::addItem(const QString& key, const QVariant& value)
+	{
+		m_comBox->addItem(key, value);
+	}
+
 	void CLabComBox::setCurIndex(int nIndex)
 	{
 		m_comBox->setCurrentIndex(nIndex);
@@ -75,9 +85,19 @@ namespace QCUSWIDGETLIB
 		m_comBox->clear();
 	}
 
+	void CLabComBox::setConnect(std::function<void(QString)> func)
+	{
+		connect(m_comBox, &QComboBox::currentTextChanged, func);
+	}
+
 	void CLabComBox::initUI()
 	{
+		this->setContentsMargins(0, 0, 0, 0);
 		QHBoxLayout* layout = new QHBoxLayout(this);
+		layout->setContentsMargins(0, 0, 0, 0);
+		layout->setSpacing(0);
+		layout->setMargin(0);
+		layout->setAlignment(Qt::AlignLeft);
 		m_labLabel = new QLabel(this);
 		m_comBox = new QComboBox(this);
 		layout->addWidget(m_labLabel);

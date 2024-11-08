@@ -75,11 +75,11 @@ set(QT_VERSION_5 true)
 set(QT_VERSION_6 false)
 
 #### QT 核心模块
-set(THIS_QT_CORE Core Widgets Network Gui Concurrent)
+set(THIS_QT_CORE Core Widgets Network Gui Concurrent Charts)
 
 #### QT5 核心库
 if(QT_VERSION_5)
-    set(THIS_QT_CORE_LIB Qt5::Core Qt5::Widgets Qt5::Network Qt5::Gui Qt5::Concurrent)
+    set(THIS_QT_CORE_LIB Qt5::Core Qt5::Widgets Qt5::Network Qt5::Gui Qt5::Concurrent Qt5::Charts)
 endif()
 
 #### QT6 核心库
@@ -376,9 +376,9 @@ else (WIN32)
                 RUNTIME DESTINATION ${WIN_LIBRARY_OUTPUT_PATH})
 
                 if(ADD_OTHER)
-                    install(DIRECTORY ${ADD_OTHER_HEADER} DESTINATION ${WIN_LIBRARY_INCLUDE_PATH}/include)
-                    install(DIRECTORY ${ADD_OTHER_LIB} DESTINATION ${WIN_LIBRARY_OUTPUT_PATH})
-                    install(DIRECTORY ${ADD_OTHER_DLL} DESTINATION ${WIN_LIBRARY_OUTPUT_PATH})
+                    #install(DIRECTORY ${ADD_OTHER_HEADER} DESTINATION ${WIN_LIBRARY_INCLUDE_PATH}/include)
+                    #install(DIRECTORY ${ADD_OTHER_LIB} DESTINATION ${WIN_LIBRARY_OUTPUT_PATH})
+                    #install(DIRECTORY ${ADD_OTHER_DLL} DESTINATION ${WIN_LIBRARY_OUTPUT_PATH})
                 endif()
 
     else()
