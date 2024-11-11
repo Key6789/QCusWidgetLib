@@ -102,6 +102,13 @@ namespace QCUSWIDGETLIB
 			m_btns.value(index)->setStyleSheet("background-color: " + color.name() + ";");
 		}
 	}
+	void CBtnsHBox::setBtnIcon(int index, const QIcon& icon)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setIcon(icon);
+		}
+	}
 	void CBtnsHBox::setBtnClicked(int index, const std::function<void()>& func)
 	{
 		if (m_btns.contains(index))
@@ -145,6 +152,11 @@ namespace QCUSWIDGETLIB
 		}
 	}
 
+	void CBtnsHBox::addStretch()
+	{
+		m_layout->addStretch();
+	}
+
 	CBtnsVBox::CBtnsVBox(QWidget* parent)
 	{
 		m_layout = new QVBoxLayout(this);
@@ -169,6 +181,13 @@ namespace QCUSWIDGETLIB
 		if (m_btns.contains(index))
 		{
 			m_btns.value(index)->setStyleSheet("background-color: " + color.name() + ";");
+		}
+	}
+	void CBtnsVBox::setBtnIcon(int index, const QIcon& icon)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setIcon(icon);
 		}
 	}
 	void CBtnsVBox::setBtnClicked(int index, const std::function<void()>& func) {
@@ -204,6 +223,22 @@ namespace QCUSWIDGETLIB
 		{
 			m_btns.value(index)->setStyleSheet(styleSheet);
 		}
+	}
+
+	void CBtnsVBox::addStretch()
+	{
+		m_layout->addStretch();
+	}
+
+	void CBtnsVBox::setSize(int width, int height)
+	{
+		setFixedSize(width, height);
+	}
+
+	void CBtnsVBox::resizeEvent(QResizeEvent* event)
+	{
+		QWidget::resizeEvent(event);
+
 	}
 
 

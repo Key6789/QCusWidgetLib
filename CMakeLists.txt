@@ -123,18 +123,18 @@ if(WIN32)
          ### 头文件
         set(ADD_OTHER_HEADER 
              ## 头文件目录
-             "D:/Soft/AtamiLib/CommunicationModule/include"
+            #"D:/Soft/AtamiLib/CommunicationModule/include"
          )
         ### 库文件
         set(ADD_OTHER_LIB 
             ## 库文件 lib 目录
-            "D:/Soft/AtamiLib/CommunicationModule/Lib/Release/"
+            #"D:/Soft/AtamiLib/CommunicationModule/Lib/Release/"
 
          )
          ### 库文件 dll
         set(ADD_OTHER_DLL 
              ## 库文件 dll 目录
-             "D:/Soft/AtamiLib/CommunicationModule/Lib/Release/"
+             #"D:/Soft/AtamiLib/CommunicationModule/Lib/Release/"
         )
      endif()
 else(UNIX)

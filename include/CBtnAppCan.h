@@ -57,6 +57,9 @@ namespace QCUSWIDGETLIB
 		// 设置颜色
 		void setBtnColor(int index, const QColor& color);
 
+		// 设置图片
+		void setBtnIcon(int index, const QIcon& icon);
+
 		// 设置 连接信号槽
 		void setBtnClicked(int index, const std::function<void()>& func);
 
@@ -68,6 +71,8 @@ namespace QCUSWIDGETLIB
 
 		void setConnect(int index, const std::function<void()>& func);
 		void setStyleSheet(int index, const QString& styleSheet);
+
+		void addStretch();
 
 
 
@@ -92,6 +97,9 @@ namespace QCUSWIDGETLIB
 		// 设置颜色
 		void setBtnColor(int index, const QColor& color);
 
+		// 设置图片
+		void setBtnIcon(int index, const QIcon& icon);
+
 		// 设置 连接信号槽
 		void setBtnClicked(int index, const std::function<void()>& func);
 
@@ -104,8 +112,17 @@ namespace QCUSWIDGETLIB
 		void setConnect(int index, const std::function<void()>& func);
 		void setStyleSheet(int index, const QString& styleSheet);
 
+		// 设置间距
+		void addStretch();
+
+		// 设置尺寸
+		void setSize(int width, int height);
+
 	signals:
 		void btnClicked(int index);
+
+	protected:
+		void resizeEvent(QResizeEvent* event) override;
 
 	private:
 		QMap<int, QPushButton*> m_btns = QMap<int, QPushButton*>();
