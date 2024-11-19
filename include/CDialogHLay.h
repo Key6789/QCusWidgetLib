@@ -23,6 +23,23 @@ namespace QCUSWIDGETLIB
 		QHBoxLayout* m_hLayout = nullptr;
 
 	};
+	class QCUSWIDGETLIB_EXPORT CDialogVLay : public QDialog
+	{
+		Q_OBJECT
+
+	public:
+		CDialogVLay(QWidget* parent);
+		~CDialogVLay();
+
+	public:
+		void addWidget(QWidget* widget, int stretch = 0);
+
+	private:
+		void initUI();
+
+		QVBoxLayout* m_vLayout = nullptr;
+
+	};
 
 
 

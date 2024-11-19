@@ -75,11 +75,34 @@ set(QT_VERSION_5 true)
 set(QT_VERSION_6 false)
 
 #### QT 核心模块
-set(THIS_QT_CORE Core Widgets Network Gui Concurrent Charts)
+set(THIS_QT_CORE Widgets 
+    Network 
+    Gui 
+    Svg
+    Sql
+    Charts
+    OpenGL
+    Concurrent
+    3DRender
+    3DExtras
+    PrintSupport )
 
 #### QT5 核心库
 if(QT_VERSION_5)
-    set(THIS_QT_CORE_LIB Qt5::Core Qt5::Widgets Qt5::Network Qt5::Gui Qt5::Concurrent Qt5::Charts)
+    set(THIS_QT_CORE_LIB
+        Qt5::Core
+        Qt5::Widgets
+        Qt5::Network
+        Qt5::Gui
+        Qt5::Svg
+        Qt5::Sql
+        Qt5::Charts
+        Qt5::OpenGL
+        Qt5::Concurrent
+        Qt5::3DRender
+        Qt5::3DExtras
+        Qt5::PrintSupport
+    )
 endif()
 
 #### QT6 核心库
@@ -225,7 +248,7 @@ set(PROJECT_SOURCES
 )
 # 设置编译器路径
 # 添加共享库 Test11，并指定源文件
-add_library(${THISPROJECTNAME} SHARED ${PROJECT_SOURCES})
+add_library(${THISPROJECTNAME} SHARED ${PROJECT_SOURCES} "include/qcustomplot.h" "source/qcustomplot.cpp")
 if(QT_OPEN)
         target_link_libraries(${THISPROJECTNAME} PRIVATE 
         ${THIS_QT_CORE_LIB}

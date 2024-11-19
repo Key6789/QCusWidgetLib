@@ -4,6 +4,10 @@ namespace QCUSWIDGETLIB
 	CBtnAppCan::CBtnAppCan(QWidget* parent)
 	{
 		QHBoxLayout* layout = new QHBoxLayout(this);
+		layout->setContentsMargins(0, 0, 0, 0);
+		layout->setSpacing(0);
+		layout->setMargin(0);
+
 		m_appBtn = new QPushButton(this);
 		m_canBtn = new QPushButton(this);
 		m_appBtn->setText("Ó¦ÓÃ");
@@ -157,6 +161,16 @@ namespace QCUSWIDGETLIB
 		m_layout->addStretch();
 	}
 
+	void CBtnsHBox::setLayMargin(int left, int top, int right, int bottom)
+	{
+		m_layout->setContentsMargins(left, top, right, bottom);
+	}
+
+	void CBtnsHBox::setLaySpacing(int spacing)
+	{
+		m_layout->setSpacing(spacing);
+	}
+
 	CBtnsVBox::CBtnsVBox(QWidget* parent)
 	{
 		m_layout = new QVBoxLayout(this);
@@ -175,6 +189,13 @@ namespace QCUSWIDGETLIB
 		else
 		{
 			return nullptr;
+		}
+	}
+	void CBtnsVBox::setBtnText(int index, const QString& text)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setText(text);
 		}
 	}
 	void CBtnsVBox::setBtnColor(int index, const QColor& color) {
@@ -225,6 +246,26 @@ namespace QCUSWIDGETLIB
 		}
 	}
 
+	void CBtnsVBox::setBtnClicked(int index, bool clicked)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setChecked(clicked);
+		}
+	}
+
+	bool CBtnsVBox::getBtnClicked(int index)
+	{
+		if (m_btns.contains(index))
+		{
+			return m_btns.value(index)->isChecked();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	void CBtnsVBox::addStretch()
 	{
 		m_layout->addStretch();
@@ -235,11 +276,66 @@ namespace QCUSWIDGETLIB
 		setFixedSize(width, height);
 	}
 
-	void CBtnsVBox::resizeEvent(QResizeEvent* event)
+	void CBtnsVBox::setBtnFixSize(int index, int width, int height)
 	{
-		QWidget::resizeEvent(event);
-
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setFixedSize(width, height);
+		}
 	}
+
+	void CBtnsVBox::setBtnResize(int index, int width, int height)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->resize(width, height);
+		}
+	}
+
+	void CBtnsVBox::setBtnSizePolicy(int index, QSizePolicy policy)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setSizePolicy(policy);
+		}
+	}
+
+	void CBtnsVBox::setObjectName(int index, const QString& name)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setObjectName(name);
+		}
+	}
+
+	void CBtnsVBox::setBtnStyle(int index, const QString& styleSheet)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setStyleSheet(styleSheet);
+		}
+	}
+
+	void CBtnsVBox::setBtnFont(int index, const QFont& font)
+	{
+		if (m_btns.contains(index))
+		{
+			m_btns.value(index)->setFont(font);
+		}
+	}
+
+	QString CBtnsVBox::getObjectName(int index)
+	{
+		if (m_btns.contains(index))
+		{
+			return m_btns.value(index)->objectName();
+		}
+		else
+		{
+			return "";
+		}
+	}
+
 
 
 }

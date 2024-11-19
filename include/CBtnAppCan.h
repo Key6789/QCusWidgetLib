@@ -74,6 +74,9 @@ namespace QCUSWIDGETLIB
 
 		void addStretch();
 
+		void setLayMargin(int left, int top, int right, int bottom);
+
+		void setLaySpacing(int spacing);
 
 
 	signals:
@@ -112,17 +115,29 @@ namespace QCUSWIDGETLIB
 		void setConnect(int index, const std::function<void()>& func);
 		void setStyleSheet(int index, const QString& styleSheet);
 
+		void setBtnClicked(int index, bool clicked);
+		bool getBtnClicked(int index);
+
 		// …Ë÷√º‰æ‡
 		void addStretch();
 
 		// …Ë÷√≥ﬂ¥Á
 		void setSize(int width, int height);
 
+		void setBtnFixSize(int index, int width, int height);
+		void setBtnResize(int index, int width, int height);
+
+		void setBtnSizePolicy(int index, QSizePolicy policy);
+		void setObjectName(int index, const QString& name);
+		void setBtnStyle(int index, const QString& styleSheet);
+		void setBtnFont(int index, const QFont& font);
+
+		QString getObjectName(int index);
+
+
 	signals:
 		void btnClicked(int index);
 
-	protected:
-		void resizeEvent(QResizeEvent* event) override;
 
 	private:
 		QMap<int, QPushButton*> m_btns = QMap<int, QPushButton*>();

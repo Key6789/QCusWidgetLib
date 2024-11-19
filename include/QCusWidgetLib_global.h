@@ -49,7 +49,7 @@
 #include <QDateTimeEdit>
 #include <QProgressBar>
 #include <QListWidget>
-
+#include "qcustomplot.h"
 #define __CSTRING_UTF8(x) QString::fromLocal8Bit(x)
 
 #if defined(QCUSWIDGETLIB_LIBRARY)

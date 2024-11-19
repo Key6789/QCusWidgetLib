@@ -17,6 +17,22 @@ namespace QCUSWIDGETLIB
 	void CDialogHLay::initUI()
 	{
 		m_hLayout = new QHBoxLayout(this);
+		setLayout(m_hLayout);
+	}
+	CDialogVLay::CDialogVLay(QWidget* parent)
+	{
+		initUI();
+	}
+	CDialogVLay::~CDialogVLay()
+	{}
+	void CDialogVLay::addWidget(QWidget * widget, int stretch)
+	{
+		m_vLayout->addWidget(widget, stretch);
+	}
+	void CDialogVLay::initUI()
+	{
+		m_vLayout = new QVBoxLayout(this);
+		setLayout(m_vLayout);
 	}
 }
 
