@@ -806,24 +806,25 @@ namespace QCUSWIDGETLIB
 	}
 
 	void HistogramWidget::xAxisRangeChangedMouse(QMouseEvent* event) {
-		if (event->buttons() & Qt::LeftButton) {
-			//// 用于拖动 图像
-			//// 获取当前 x 坐标
-			// double xMouse = m_plot->xAxis->pixelToCoord(event->pos().x());
+		if (event->buttons() & Qt::LeftButton && m_dragging) {
+			// 处理鼠标拖动事件，更新 x 轴范围
+			double xMouse = m_plot->xAxis->pixelToCoord(event->pos().x());
 
 			// // 计算偏移量
-			// double offset = xMouse - m_mousePressPosition.x();
+			double offset = xMouse - m_mousePressPosition.x();
 
 			// // 重新设置 x 轴范围
-			// double xMin = m_plot->xAxis->range().lower;
-			// double xMax = m_plot->xAxis->range().upper;
-			// m_plot->xAxis->setRange(xMin + offset, xMax + offset);
+			double xMin = m_plot->xAxis->range().lower - offset;
+			double xMax = m_plot->xAxis->range().upper - offset;
+			if (xMin > m_RangeX.lower && xMax < m_RangeX.upper) {
+				m_plot->xAxis->setRange(xMin, xMax);
+				m_mousePressPosition.setX(xMouse);
+			}
 
 			// // 重新绘制
 			// m_plot->replot();
 		}
 	}
-
 
 	void HistogramWidget::MoveBollPress(QMouseEvent* event) {
 		if (event->buttons() & Qt::LeftButton) {
@@ -837,17 +838,20 @@ namespace QCUSWIDGETLIB
 			if (QLineF(QPointF(x, y), event->pos()).length() < 10) {
 				m_moveBoll.isFirstMoving = true;
 				m_moveBoll.isSecondMoving = false;
+				m_dragging = false;
 			}
 			else if (QLineF(QPointF(x2, y2), event->pos()).length() < 10) {
 				m_moveBoll.isSecondMoving = true;
 				m_moveBoll.isFirstMoving = false;
+				m_dragging = false;
 			}
-			else
-			{
+			else {
 				m_moveBoll.isFirstMoving = false;
 				m_moveBoll.isSecondMoving = false;
-
-				m_mousePressPosition = QPointF(m_plot->xAxis->pixelToCoord(event->pos().x()), m_plot->yAxis->pixelToCoord(event->pos().y()));
+				m_dragging = true;
+				m_mousePressPosition =
+					QPointF(m_plot->xAxis->pixelToCoord(event->pos().x()),
+						m_plot->yAxis->pixelToCoord(event->pos().y()));
 			}
 		}
 	}
@@ -856,6 +860,7 @@ namespace QCUSWIDGETLIB
 		if (event->buttons() & Qt::LeftButton) {
 			m_moveBoll.isFirstMoving = false;
 			m_moveBoll.isSecondMoving = false;
+			m_dragging = false;
 			m_plot->setCursor(Qt::ArrowCursor);
 		}
 	}

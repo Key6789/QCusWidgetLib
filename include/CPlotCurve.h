@@ -284,6 +284,8 @@ namespace QCUSWIDGETLIB
 
 		QCPRange m_RangeX = QCPRange(0, 65536);
 		QCPRange m_RangeY = QCPRange(0, 65536);
+
+		bool m_dragging = false;
 	};
 }
 #endif // CPLOTCURVE_H
