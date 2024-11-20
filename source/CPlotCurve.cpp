@@ -690,5 +690,359 @@ namespace QCUSWIDGETLIB
 		m_lineV->setVisible(false);
 
 	}
+	HistogramWidget::HistogramWidget(QWidget* parent) {
+		QVBoxLayout* mainLayout = new QVBoxLayout(this);
+		mainLayout->setContentsMargins(0, 0, 0, 0);
+		mainLayout->setSpacing(0);
+
+		m_plot = new QCustomPlot(this);
+		mainLayout->addWidget(m_plot);
+
+		QFont YHfont("Microsoft YaHei", 10, QFont::Normal);
+		m_plot->setFont(YHfont);
+		m_plot->xAxis->setLabelFont(YHfont);
+		m_plot->xAxis->setTickLabelFont(YHfont);
+		m_plot->yAxis->setLabelFont(YHfont);
+		m_plot->yAxis->setTickLabelFont(YHfont);
+		//
+		// 背景设为黑色
+		QColor backgroundColor(0, 0, 0);
+		m_plot->setBackground(backgroundColor);
+		// 轴线设为白色
+		QColor axisColor(255, 255, 255);
+		m_plot->xAxis->setBasePen(QPen(axisColor));
+		m_plot->yAxis->setBasePen(QPen(axisColor));
+		// 轴线刻度设为白色
+		m_plot->xAxis->setTickPen(QPen(axisColor));
+		m_plot->yAxis->setTickPen(QPen(axisColor));
+		// 坐标轴标签设为白色
+		m_plot->xAxis->setLabelColor(axisColor);
+		m_plot->yAxis->setLabelColor(axisColor);
+		// 坐标轴刻度数字设为白色
+		m_plot->xAxis->setTickLabelColor(axisColor);
+		m_plot->yAxis->setTickLabelColor(axisColor);
+
+		// 取消网格线
+		m_plot->xAxis->grid()->setVisible(false);
+		m_plot->yAxis->grid()->setVisible(false);
+		//
+		m_plot->addGraph();
+		m_plot->graph(0)->setPen(QPen(QColor(0, 255, 0)));
+		m_plot->graph(0)->setBrush(QBrush(QColor(0, 255, 0, 100)));
+		m_plot->graph(0)->setLineStyle(QCPGraph::lsLine);
+
+		// 设置范围 为 0-65536
+		m_plot->xAxis->setRange(m_RangeX);
+		m_plot->yAxis->setRange(m_RangeY);
+
+		// 设置坐标轴刻度标签策略，不显示负值
+		m_plot->xAxis->setTickLabels(true);
+		m_plot->yAxis->setTickLabels(true);
+
+		// 使能鼠标缩放
+		m_plot->setInteractions(QCP::iSelectAxes | QCP::iSelectLegend |
+			QCP::iSelectPlottables);  // 设置曲线属性
+
+		// 设置缩放 放大倍数为1.2
+		// m_plot->setInteraction(QCP::iRangeZoom, true);
+		m_plot->axisRect()->setRangeZoomAxes(m_plot->xAxis, m_plot->yAxis);
+		m_plot->axisRect()->setRangeZoomFactor(2, 1);  // x方向为1.2 y为1 是不改变。
+
+		// 只允许拖动X轴
+		// 只能拖动X轴
+		m_plot->axisRect()->setRangeDrag(Qt::Horizontal);
+
+		initMoveBoll();
+
+		// x轴范围变化时触发
+		connect(m_plot, &QCustomPlot::mouseMove, this,
+			&HistogramWidget::xAxisRangeChangedMouse);
+		// 滚轮放大缩小
+		connect(m_plot, &QCustomPlot::mouseWheel, this,
+			&HistogramWidget::mouseWheelZoom);
+
+		connect(m_plot, &QCustomPlot::mousePress, this,
+			&HistogramWidget::MoveBollPress);
+		connect(m_plot, &QCustomPlot::mouseRelease, this,
+			&HistogramWidget::MoveBollRelease);
+		connect(m_plot, &QCustomPlot::mouseMove, this,
+			&HistogramWidget::MoveBollMove);
+
+		connect(m_plot, &QCustomPlot::mouseMove, this,
+			&HistogramWidget::traceMouseMove);
+
+		m_plot->replot();
+	}
+
+	HistogramWidget::~HistogramWidget() {}
+
+	void HistogramWidget::plotScaleMax(double zoomFactor) {
+		double xMax = m_plot->xAxis->range().upper;
+		double xMin = m_plot->xAxis->range().lower;
+
+		m_plot->axisRect()->setRangeZoomFactor(1.0 / zoomFactor, 1);
+		if ((xMax * zoomFactor) > 65536) {
+			return;
+		}
+		m_plot->xAxis->setRange(xMin * zoomFactor, xMax * zoomFactor);
+		m_plot->replot();
+	}
+
+	void HistogramWidget::plotScaleMin(double zoomFactor) {
+		double xMax = m_plot->xAxis->range().upper;
+		double xMin = m_plot->xAxis->range().lower;
+
+		m_plot->axisRect()->setRangeZoomFactor(zoomFactor, 1);
+		m_plot->xAxis->setRange(xMin / zoomFactor, xMax / zoomFactor);
+		m_plot->replot();
+	}
+
+	void HistogramWidget::setHistogramData(QVector<double> xData,
+		QVector<double> yData) {
+		// 设置数据
+		m_plot->graph(0)->setData(xData, yData);
+		// 重新绘制
+		m_plot->replot();
+	}
+
+	void HistogramWidget::xAxisRangeChangedMouse(QMouseEvent* event) {
+		if (event->buttons() & Qt::LeftButton) {
+			//// 用于拖动 图像
+			//// 获取当前 x 坐标
+			// double xMouse = m_plot->xAxis->pixelToCoord(event->pos().x());
+
+			// // 计算偏移量
+			// double offset = xMouse - m_mousePressPosition.x();
+
+			// // 重新设置 x 轴范围
+			// double xMin = m_plot->xAxis->range().lower;
+			// double xMax = m_plot->xAxis->range().upper;
+			// m_plot->xAxis->setRange(xMin + offset, xMax + offset);
+
+			// // 重新绘制
+			// m_plot->replot();
+		}
+	}
+
+
+	void HistogramWidget::MoveBollPress(QMouseEvent* event) {
+		if (event->buttons() & Qt::LeftButton) {
+			//
+			double x = m_plot->xAxis->coordToPixel(m_moveBoll.pointFirst.x());
+			double y = m_plot->yAxis->coordToPixel(m_moveBoll.pointFirst.y());
+
+			double x2 = m_plot->xAxis->coordToPixel(m_moveBoll.pointSecond.x());
+			double y2 = m_plot->yAxis->coordToPixel(m_moveBoll.pointSecond.y());
+
+			if (QLineF(QPointF(x, y), event->pos()).length() < 10) {
+				m_moveBoll.isFirstMoving = true;
+				m_moveBoll.isSecondMoving = false;
+			}
+			else if (QLineF(QPointF(x2, y2), event->pos()).length() < 10) {
+				m_moveBoll.isSecondMoving = true;
+				m_moveBoll.isFirstMoving = false;
+			}
+			else
+			{
+				m_moveBoll.isFirstMoving = false;
+				m_moveBoll.isSecondMoving = false;
+
+				m_mousePressPosition = QPointF(m_plot->xAxis->pixelToCoord(event->pos().x()), m_plot->yAxis->pixelToCoord(event->pos().y()));
+			}
+		}
+	}
+
+	void HistogramWidget::MoveBollRelease(QMouseEvent* event) {
+		if (event->buttons() & Qt::LeftButton) {
+			m_moveBoll.isFirstMoving = false;
+			m_moveBoll.isSecondMoving = false;
+			m_plot->setCursor(Qt::ArrowCursor);
+		}
+	}
+
+	void HistogramWidget::MoveBollMove(QMouseEvent* event) {
+		if (event->buttons() & Qt::LeftButton) {
+			double x = m_plot->xAxis->pixelToCoord(event->pos().x());
+
+			if (m_moveBoll.isFirstMoving) {
+				m_moveBoll.pointFirst.setX(x);
+				setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+			}
+			if (m_moveBoll.isSecondMoving) {
+				m_moveBoll.pointSecond.setX(x);
+				setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+			}
+		}
+	}
+
+	void HistogramWidget::mouseWheelZoom(QWheelEvent* event) {
+		double zoomFactor = 1.2;
+		// 检测x轴范围是否在0-65536之间
+		double xMin = m_plot->xAxis->range().lower;
+		double xMax = m_plot->xAxis->range().upper;
+
+		if (event->delta() > 0) {
+			m_plot->axisRect()->setRangeZoomFactor(zoomFactor, 1);
+			m_plot->xAxis->setRange(xMin / zoomFactor, xMax / zoomFactor);
+		}
+		else {
+			m_plot->axisRect()->setRangeZoomFactor(1.0 / zoomFactor, 1);
+			if ((xMax * zoomFactor) > 65536) {
+				return;
+			}
+			m_plot->xAxis->setRange(xMin * zoomFactor, xMax * zoomFactor);
+		}
+		m_plot->replot();
+	}
+
+	void HistogramWidget::xAxisPressed(QMouseEvent* event) {
+		if (event->buttons() & Qt::LeftButton) {
+			m_plot->setMouseTracking(true);
+			m_plot->setCursor(Qt::ClosedHandCursor);
+
+			double xMouse = m_plot->xAxis->pixelToCoord(event->pos().x());
+			double yMouse = m_plot->yAxis->pixelToCoord(event->pos().y());
+			m_mousePressPosition = QPointF(xMouse, yMouse);
+		}
+	}
+
+	void HistogramWidget::initMoveBoll() {
+		// 设置鼠标跟踪
+		m_plot->setMouseTracking(true);
+
+		// 初始化
+		m_moveBoll.firstLine = new QCPItemLine(m_plot);
+		m_moveBoll.secondLine = new QCPItemLine(m_plot);
+		m_moveBoll.thirdLine = new QCPItemLine(m_plot);
+
+		// 可见
+		m_moveBoll.firstLine->setVisible(true);
+		m_moveBoll.secondLine->setVisible(true);
+		m_moveBoll.thirdLine->setVisible(true);
+
+		// 设置宽度
+		m_moveBoll.firstLine->setPen(QPen(QColor(255, 0, 0), 4));
+		m_moveBoll.secondLine->setPen(QPen(QColor(255, 0, 0), 4));
+		m_moveBoll.thirdLine->setPen(QPen(QColor(255, 0, 0), 4));
+
+		//
+		setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+
+		//  鼠标游标
+		m_tracer = new QCPItemLine(m_plot);
+		m_tracer->setVisible(true);
+		m_tracer->setPen(
+			QPen(QColor(255, 0, 0), 4, Qt::SolidLine));  // 设置tracer的颜色绿色
+		m_tracer->setLayer("overlay");                   // 设置tracer在最上层
+		m_tracer->setClipToAxisRect(false);  // 设置tracer可超出坐标轴范围
+
+		m_imageTracer = new QCPItemLine(m_plot);
+		m_imageTracer->setVisible(false);
+		m_imageTracer->setPen(
+			QPen(QColor(255, 0, 0), 4, Qt::SolidLine));  // 设置tracer的颜色绿色
+		m_imageTracer->setLayer("overlay");              // 设置tracer在最上层
+		m_imageTracer->setClipToAxisRect(
+			false);  // 设置tracer可超出坐标轴范围 //  鼠标游标
+		m_tracer = new QCPItemLine(m_plot);
+		m_tracer->setVisible(true);
+		m_tracer->setPen(
+			QPen(QColor(255, 0, 0), 4, Qt::SolidLine));  // 设置tracer的颜色绿色
+		m_tracer->setLayer("overlay");                   // 设置tracer在最上层
+		m_tracer->setClipToAxisRect(false);  // 设置tracer可超出坐标轴范围
+
+		m_imageTracer = new QCPItemLine(m_plot);
+		m_imageTracer->setVisible(false);
+		m_imageTracer->setPen(
+			QPen(QColor(255, 0, 0), 4, Qt::SolidLine));  // 设置tracer的颜色绿色
+		m_imageTracer->setLayer("overlay");              // 设置tracer在最上层
+		m_imageTracer->setClipToAxisRect(false);  // 设置tracer可超出坐标轴范围
+	}
+
+	void HistogramWidget::setMoveBoll(QPointF pointFirst, QPointF pointSecond) {
+		if (m_moveBoll.firstLine == nullptr || m_moveBoll.secondLine == nullptr ||
+			m_moveBoll.thirdLine == nullptr) {
+			initMoveBoll();
+		}
+		// 设置位置
+		m_moveBoll.secondLine->setHead(QCPLineEnding::esNone);
+		m_moveBoll.firstLine->setTail(QCPLineEnding::esDisc);
+		m_moveBoll.firstLine->start->setCoords(0, pointFirst.y());
+		m_moveBoll.firstLine->end->setCoords(pointFirst.x(), pointFirst.y());
+		m_moveBoll.pointFirst = pointFirst;
+		m_moveBoll.pointSecond = pointSecond;
+		// 第二条
+		m_moveBoll.secondLine->setHead(QCPLineEnding::esDisc);
+		m_moveBoll.secondLine->setTail(QCPLineEnding::esDisc);
+		m_moveBoll.secondLine->start->setCoords(pointFirst.x(), pointFirst.y());
+		m_moveBoll.secondLine->end->setCoords(pointSecond.x(), pointSecond.y());
+
+		// 第三条
+		m_moveBoll.thirdLine->setHead(QCPLineEnding::esDisc);
+		m_moveBoll.thirdLine->setTail(QCPLineEnding::esNone);
+		m_moveBoll.thirdLine->start->setCoords(pointSecond.x(), pointSecond.y());
+		m_moveBoll.thirdLine->end->setCoords(65536, pointSecond.y());
+
+		// 重新绘制
+		m_plot->replot();
+	}
+
+	void HistogramWidget::traceMouseMove(QMouseEvent* event) {
+		double x = m_plot->xAxis->pixelToCoord(
+			event->pos()
+			.x());  // 鼠标点的像素坐标转plot坐标// 鼠标点的像素坐标转plot坐标
+		bool fondRange = true;
+		QCPRange range = m_plot->graph(0)->getKeyRange(
+			fondRange, QCP::sdBoth);  // 获取0号曲线X轴坐标范围
+		if (x < range.lower || x > range.upper) {
+			return;
+		}
+		m_tracer->start->setCoords(x, 0);
+		m_tracer->end->setCoords(x, 65536);
+		m_plot->replot();
+	}
+
+	void HistogramWidget::setImageTracer(double xValue) {
+		m_imageTracer->setVisible(true);
+		m_imageTracer->start->setCoords(xValue, 0);
+		m_imageTracer->end->setCoords(xValue, 65536);
+		m_plot->replot();
+	}
+
+	void HistogramWidget::setImageTracerVisible(bool visible) {
+		m_imageTracer->setVisible(visible);
+		m_plot->replot();
+	}
+
+	void HistogramWidget::setBollFirstPoint(QPointF point) {
+		m_moveBoll.pointFirst = point;
+		setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+	}
+
+	void HistogramWidget::setBollSecondPoint(QPointF point) {
+		m_moveBoll.pointSecond = point;
+		setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+	}
+
+	void HistogramWidget::setMaxRangX(double maxRangX) {
+		m_RangeX.upper = maxRangX;
+		m_plot->xAxis->setRange(m_RangeX);
+	}
+
+	void HistogramWidget::setMinRangX(double minRangX) {
+		m_RangeX.lower = minRangX;
+		m_plot->xAxis->setRange(m_RangeX);
+	}
+
+	void HistogramWidget::setMaxRangY(double maxRangY) {
+		m_RangeY.upper = maxRangY;
+		m_plot->yAxis->setRange(m_RangeY);
+	}
+
+	void HistogramWidget::setMinRangY(double minRangY) {
+		m_RangeY.lower = minRangY;
+		m_plot->yAxis->setRange(m_RangeY);
+	}
+
+	QCustomPlot* HistogramWidget::getPlot() const { return m_plot; }
 
 }

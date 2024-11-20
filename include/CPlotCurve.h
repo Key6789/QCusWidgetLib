@@ -191,5 +191,99 @@ namespace QCUSWIDGETLIB
 		bool m_lineHMoveable = false;
 		bool m_lineVMoveable = false;
 	};
+
+	// 直方图控件
+	class QCUSWIDGETLIB_EXPORT HistogramWidget : public QWidget {
+		Q_OBJECT
+			// 可移动的小球
+			struct MoveBoll {
+			QPointF pointFirst = QPointF(0, 100);
+			QPointF pointSecond = QPointF(20, 100);
+
+			bool isFirstMoving = false;
+			bool isSecondMoving = false;
+
+			QCPItemLine* firstLine = nullptr;
+			QCPItemLine* secondLine = nullptr;
+			QCPItemLine* thirdLine = nullptr;
+		};
+
+	public:
+		HistogramWidget(QWidget* parent = nullptr);
+		~HistogramWidget();
+		//
+		// 用于放大
+		void plotScaleMax(double zoomFactor);
+
+		// 用于缩小
+		void plotScaleMin(double zoomFactor);
+
+		// 设置直方图数据
+		void setHistogramData(QVector<double> xData, QVector<double> yData);
+
+		// 鼠标事件中改变X轴范围
+		void xAxisRangeChangedMouse(QMouseEvent* event);
+
+		// 移动控件按下事件
+		void MoveBollPress(QMouseEvent* event);
+
+		// 移动控件释放事件
+		void MoveBollRelease(QMouseEvent* event);
+
+		// 移动控件移动事件
+		void MoveBollMove(QMouseEvent* event);
+
+		// 鼠标滚轮缩放事件
+		void mouseWheelZoom(QWheelEvent* event);
+
+		// X轴按下事件
+		void xAxisPressed(QMouseEvent* event);
+
+		// 初始化移动控件
+		void initMoveBoll();
+
+		// 设置移动控件的位置
+		void setMoveBoll(QPointF pointFirst, QPointF pointSecond);
+
+		// 跟踪鼠标移动事件
+		void traceMouseMove(QMouseEvent* event);
+
+		// 设置图像跟踪器的X值
+		void setImageTracer(double xValue);
+
+		// 设置图像跟踪器的可见性
+		void setImageTracerVisible(bool visible);
+
+		// 设置第一个小球点
+		void setBollFirstPoint(QPointF point);
+
+		// 设置第二个小球点
+		void setBollSecondPoint(QPointF point);
+
+		// 设置最大X范围
+		void setMaxRangX(double maxRangX);
+		// 设置最小X范围
+		void setMinRangX(double minRangX);
+
+		// 设置最大Y范围
+		void setMaxRangY(double maxRangY);
+		// 设置最小Y范围
+		void setMinRangY(double minRangY);
+
+		//
+		QCustomPlot* getPlot() const;
+
+	private:
+		QCustomPlot* m_plot = nullptr;
+		QCPBars* m_bars;
+		MoveBoll m_moveBoll;
+		QPointF m_mousePressPosition = QPointF(0, 0);
+
+		QCPItemLine* m_tracer = nullptr;
+		QCPItemLine* m_imageTracer = nullptr;
+
+		QCPRange m_RangeX = QCPRange(0, 65536);
+		QCPRange m_RangeY = QCPRange(0, 65536);
+	};
 }
 #endif // CPLOTCURVE_H
