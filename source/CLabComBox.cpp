@@ -15,7 +15,7 @@ namespace QCUSWIDGETLIB
 		return m_comBox;
 	}
 
-	void CLabComBox::addItems(const QStringList & items)
+	void CLabComBox::addItems(const QStringList& items)
 	{
 		m_comBox->addItems(items);
 	}
@@ -40,7 +40,7 @@ namespace QCUSWIDGETLIB
 		return m_comBox->itemData(m_comBox->findText(key)).toString();
 	}
 
-	void CLabComBox::setLabel(const QString & strLabel)
+	void CLabComBox::setLabel(const QString& strLabel)
 	{
 		m_labLabel->setText(strLabel);
 	}
@@ -90,19 +90,46 @@ namespace QCUSWIDGETLIB
 		connect(m_comBox, &QComboBox::currentTextChanged, func);
 	}
 
+	void CLabComBox::resizeEvent(QResizeEvent* event)
+	{
+		QWidget::resizeEvent(event);
+
+		//// 设置比例为1:3
+		//int nWidth = this->width();
+		//int nHeight = this->height();
+		//int nLabWidth = nWidth / 4;
+		//int nComWidth = nWidth * 3 / 5;
+		//m_labLabel->setFixedWidth(nLabWidth);
+		//m_comBox->setFixedWidth(nComWidth);
+		//m_labLabel->setFixedHeight(nHeight);
+		//m_comBox->setFixedHeight(nHeight);
+
+	}
+
 	void CLabComBox::initUI()
 	{
+		// 设置边距并初始化水平布局
+		// 设置内容margins为0
 		this->setContentsMargins(0, 0, 0, 0);
-		QHBoxLayout* layout = new QHBoxLayout(this);
-		layout->setContentsMargins(0, 0, 0, 0);
-		layout->setSpacing(0);
-		layout->setMargin(0);
-		layout->setAlignment(Qt::AlignLeft);
+		// 初始化水平布局
+		m_layoutMain = new QHBoxLayout(this);
+
+		// 设置水平布局的边距和间距为0
+		m_layoutMain->setContentsMargins(0, 0, 0, 0);
+		m_layoutMain->setSpacing(0);
+		m_layoutMain->setMargin(0);
+		m_layoutMain->setAlignment(Qt::AlignLeft);
+
 		m_labLabel = new QLabel(this);
 		m_comBox = new QComboBox(this);
-		layout->addWidget(m_labLabel);
-		layout->addWidget(m_comBox);
-		setLayout(layout);
+		m_layoutMain->addWidget(m_labLabel, 1);
+		m_layoutMain->addWidget(m_comBox, 3);
+
+		m_labLabel->setMargin(0);
+		m_comBox->setContentsMargins(0, 0, 0, 0);
+		m_labLabel->setAlignment(Qt::AlignLeft);
+		setLayout(m_layoutMain);
+
 
 		connect(m_comBox, &QComboBox::currentTextChanged, [=](const QString& text) {emit currentTextChanged(text); });
 	}

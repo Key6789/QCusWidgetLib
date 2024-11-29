@@ -198,6 +198,14 @@ namespace QCUSWIDGETLIB
 			m_btns.value(index)->setText(text);
 		}
 	}
+	void CBtnsVBox::setLayMargin(int left, int top, int right, int bottom)
+	{
+		m_layout->setContentsMargins(left, top, right, bottom);
+	}
+	void CBtnsVBox::setLaySpacing(int spacing)
+	{
+		m_layout->setSpacing(spacing);
+	}
 	void CBtnsVBox::setBtnColor(int index, const QColor& color) {
 		if (m_btns.contains(index))
 		{

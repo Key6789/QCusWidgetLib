@@ -41,6 +41,9 @@ namespace QCUSWIDGETLIB
 
 		void setConnect(std::function<void(QString)> func);
 
+	protected:
+		void resizeEvent(QResizeEvent* event) override;
+
 	signals:
 		void currentIndexChanged(int index);
 		void currentTextChanged(const QString& text);
@@ -48,6 +51,7 @@ namespace QCUSWIDGETLIB
 	private:
 		void initUI();
 
+		QHBoxLayout* m_layoutMain = nullptr;
 		QLabel* m_labLabel = nullptr;
 		QComboBox* m_comBox = nullptr;
 	};

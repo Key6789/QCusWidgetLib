@@ -115,21 +115,8 @@ namespace QCUSWIDGETLIB
 	}
 	void CPlotCurve::setData(QVector<double> x, QVector<double> y)
 	{
-		// 清除之前的数据
-		// 设置新的数据
-		// 获取 X 轴范围
-		double x_min = *std::min_element(x.begin(), x.end());
-		double x_max = *std::max_element(x.begin(), x.end());
-		// 设置 X 轴范围
-		m_plot->xAxis->setRange(x_min, x_max);
-		// 设置 Y 轴范围
-		double y_min = *std::min_element(y.begin(), y.end());
-		double y_max = *std::max_element(y.begin(), y.end());
-		m_plot->yAxis->setRange(y_min, y_max);
 		// 设置曲线数据
 		m_plot->graph(0)->setData(x, y);
-		m_plot->graph(0)->rescaleAxes(true);
-		m_plot->replot();
 	}
 	void CPlotCurve::addPointData(double x, double y)
 	{
@@ -143,6 +130,9 @@ namespace QCUSWIDGETLIB
 		{
 			m_plot->yAxis->setRange(m_plot->yAxis->range().lower, y);
 		}
+	}
+	void CPlotCurve::updatePoint()
+	{
 		m_plot->replot();
 	}
 	QCustomPlot* CPlotCurve::getPlot() const
@@ -268,6 +258,14 @@ namespace QCUSWIDGETLIB
 			update();
 		}
 		m_plot->replot(); //刷新图标，不能省略
+	}
+	QPointF CPlotCurve::getGateLineStart() const
+	{
+		return m_gateLine.startPoint;
+	}
+	QPointF CPlotCurve::getGateLineEnd() const
+	{
+		return m_gateLine.endPoint;
 	}
 	void CPlotCurve::myMousePressEvent(QMouseEvent* event)
 	{
@@ -579,6 +577,10 @@ namespace QCUSWIDGETLIB
 	QCPItemStraightLine* CPlotColorMap::getLineV() const
 	{
 		return m_lineV;
+	}
+	void CPlotColorMap::updatePoint()
+	{
+		m_plot->replot(); //刷新图标，不能省略
 	}
 	void CPlotColorMap::slotLineMousePress(QMouseEvent* event)
 	{

@@ -94,6 +94,7 @@ namespace QCUSWIDGETLIB
 		// 设置曲线数据
 		void setData(QVector<double> x, QVector<double> y);
 		void addPointData(double x, double y);
+		
 
 		QCustomPlot* getPlot() const;
 
@@ -114,6 +115,10 @@ namespace QCUSWIDGETLIB
 		void TraceMouseMove(QMouseEvent* event); // 鼠标移动事件
 		void GateLineMouseMove(QMouseEvent* event); // 闸门线鼠标移动事件
 
+		QPointF getGateLineStart() const;
+		QPointF getGateLineEnd() const;
+
+		void updatePoint();
 	signals:
 		void signalGateLineStartChanged(double x, double y);
 		void signalGateLineEndChanged(double x, double y);
@@ -165,7 +170,7 @@ namespace QCUSWIDGETLIB
 		QCPColorGradient getColorGradient() const;
 		QCPItemStraightLine* getLineH() const;
 		QCPItemStraightLine* getLineV() const;
-
+		void updatePoint();
 	public slots:
 		void slotLineMousePress(QMouseEvent* event);
 		void slotLineMouseMove(QMouseEvent* event);
