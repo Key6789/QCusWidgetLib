@@ -145,11 +145,15 @@ class QCPPolarGraph;
 #  define QCP_LIB_DECL
 #endif
 
+#  if defined(BUILD_EXE)
+#    define QCUSWIDGETLIB_EXPORT 
+#  else
 #if defined(QCUSWIDGETLIB_LIBRARY)
-#define QCP_LIB_DECL Q_DECL_EXPORT
+#  define QCUSWIDGETLIB_EXPORT Q_DECL_EXPORT
 #else
-#define QCP_LIB_DECL Q_DECL_IMPORT
-#endif
+# define QCUSWIDGETLIB_EXPORT Q_DECL_IMPORT
+#endif  
+#  endif
 
 // define empty macro for Q_DECL_OVERRIDE if it doesn't exist (Qt < 5)
 #ifndef Q_DECL_OVERRIDE

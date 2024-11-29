@@ -16,6 +16,24 @@ endif()
 ### 是否生成 exe
 set(BUILD_EXE false)
 
+#设置exe 的 main.cpp及其他 文件 路径
+set(EXE_MAIN_FILE 
+"main.cpp"
+)
+
+#### !!!!!!!  三方库导出宏 必须修改 _global.h 文件     !!!!!!!
+#  if defined(BUILD_EXE) // 不修改
+#    define QCUSWIDGETLIB_EXPORT  // 根据自己的需求设置
+#  else
+	#if defined(QCUSWIDGETLIB_LIBRARY)  // 根据自己的需求设置
+	#  define QCUSWIDGETLIB_EXPORT Q_DECL_EXPORT  // 根据自己的需求设置
+	#else
+	# define QCUSWIDGETLIB_EXPORT Q_DECL_IMPORT  // 根据自己的需求设置
+	#endif  
+#  endif
+
+######！！！！！！！！！！！！！！！！###########
+
 #set(CMAKE_BUILD_TYPE Debug)
 
 ############################################ 参数设置区 ########################################
@@ -437,25 +455,34 @@ endif()
 
 
 
+### 添加宏定义
+if(BUILD_EXE)
+    add_definitions(-DBUILD_EXE=1)
+else()
+    add_definitions(-DBUILD_EXE=0)
+endif()
+
+### 
 ### 添加exe
 if(BUILD_EXE)
-    add_executable(${THISPROJECTNAME}_exe ${PROJECT_SOURCES}
-    )
+    add_executable(${THISPROJECTNAME}_exe ${PROJECT_SOURCES} ${EXE_MAIN_FILE}  )
     target_link_libraries(${THISPROJECTNAME}_exe 
+        ${THISPROJECTNAME}
         ${THIS_QT_CORE_LIB}
-        ${LIBS_FILES}
+        ${LIBS_FILES_LIST}
+       
     )
 
-if(WIN32)
-    set_target_properties(${THISPROJECTNAME}_exe PROPERTIES
-        OUTPUT_NAME ${THISPROJECTNAME}_exe
-        SUFFIX "_debug.exe"
-        RUNTIME_OUTPUT_DIRECTORY ${WIN_RUNTIME_DIRECTORY}
-    )
-else(UNIX)
-    set_target_properties(${THISPROJECTNAME}_exe PROPERTIES
-        OUTPUT_NAME ${THISPROJECTNAME}_exe
-        RUNTIME_OUTPUT_DIRECTORY ${LINUX_RUNTIME_DIRECTORY}
-    )
-endif()
+    if(WIN32)
+        set_target_properties(${THISPROJECTNAME}_exe PROPERTIES
+            OUTPUT_NAME ${THISPROJECTNAME}_exe
+            SUFFIX "_debug.exe"
+            RUNTIME_OUTPUT_DIRECTORY ${WIN_RUNTIME_DIRECTORY}
+        )
+    else(UNIX)
+        set_target_properties(${THISPROJECTNAME}_exe PROPERTIES
+            OUTPUT_NAME ${THISPROJECTNAME}_exe
+            RUNTIME_OUTPUT_DIRECTORY ${LINUX_RUNTIME_DIRECTORY}
+        )
+    endif()
 endif()

@@ -52,11 +52,18 @@
 #include "qcustomplot.h"
 #define __CSTRING_UTF8(x) QString::fromLocal8Bit(x)
 
-#if defined(QCUSWIDGETLIB_LIBRARY)
-#define QCUSWIDGETLIB_EXPORT Q_DECL_EXPORT
-#else
-#define QCUSWIDGETLIB_EXPORT Q_DECL_IMPORT
-#endif
+// 定义库的导出和导入宏
+
+
+#  if defined(BUILD_EXE)
+#    define QCUSWIDGETLIB_EXPORT 
+#  else
+	#if defined(QCUSWIDGETLIB_LIBRARY)
+	#  define QCUSWIDGETLIB_EXPORT Q_DECL_EXPORT
+	#else
+	# define QCUSWIDGETLIB_EXPORT Q_DECL_IMPORT
+	#endif  
+#  endif
 
 
 #endif // !
