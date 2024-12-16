@@ -52,9 +52,18 @@ namespace QCUSWIDGETLIB
 	CLabLineEditBtn::CLabLineEditBtn(QWidget* parent)
 	{
 		QHBoxLayout* layout = new QHBoxLayout(this);
+		layout->setContentsMargins(0, 0, 0, 0);
+		layout->setMargin(0);
+		this->setContentsMargins(0, 0, 0, 0);
 		m_label = new QLabel(this);
+
 		m_lineEdit = new QLineEdit(this);
 		m_btn = new QPushButton(this);
+
+		m_label->setMargin(0);
+		m_lineEdit->setContentsMargins(0, 0, 0, 0);
+		m_btn->setContentsMargins(0, 0, 0, 0);
+
 		layout->addWidget(m_label);
 		layout->addWidget(m_lineEdit);
 		layout->addWidget(m_btn);
@@ -151,6 +160,30 @@ namespace QCUSWIDGETLIB
 		if (color.isValid())
 		{
 			m_lineEdit->setText(color.name());
+		}
+	}
+
+	void CLabLineEditBtn::btnClickedFilePath()
+	{
+		// 读取 .tiff 
+		QFileDialog dialog(this);
+		dialog.setFileMode(QFileDialog::Directory);  // 选择单个文件
+		if (!m_pathFilter.isEmpty())
+		{
+			dialog.setNameFilter(m_pathFilter);  // 设置文件过滤器
+		}
+		// 设置文件过滤器
+		dialog.setWindowTitle(__CSTRING_UTF8("选择文件"));
+		dialog.setLabelText(QFileDialog::Accept, __CSTRING_UTF8("选择"));
+		dialog.setLabelText(QFileDialog::Reject, __CSTRING_UTF8("取消"));
+
+		if (dialog.exec())
+		{
+			QString fileName = dialog.selectedFiles().first();  // 获取选中的文件名
+			if (!fileName.isEmpty())
+			{
+				m_lineEdit->setText(fileName);  // 将文件名显示在 QLineEdit 中
+			}
 		}
 	}
 

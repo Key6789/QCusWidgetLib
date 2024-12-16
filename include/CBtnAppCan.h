@@ -20,6 +20,12 @@ namespace QCUSWIDGETLIB
 		QPushButton* getAppBtn();
 		// 获取取消按钮
 		QPushButton* getCanBtn();
+		
+		// 设置互斥属性
+		void setMutualExclusive(bool mutual);
+
+		// 设置应用按钮和取消按钮的顺序
+	
 		// 设置应用按钮文字
 		void setAppBtnText(const QString& text);
 		// 设置取消按钮文字
@@ -55,6 +61,8 @@ namespace QCUSWIDGETLIB
 	private:
 		QPushButton* m_appBtn = nullptr; // 应用按钮指针
 		QPushButton* m_canBtn = nullptr; // 取消按钮指针
+
+		
 	};
 
 

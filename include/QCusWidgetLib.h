@@ -13,6 +13,7 @@
 #include "CRadiobtns.h"
 #include "CLabChart.h"
 #include "CPlotCurve.h"
+#include "CMainWindow.h"
 namespace QCUSWIDGETLIB
 {
 	class QCUSWIDGETLIB_EXPORT QCusWidgetLib

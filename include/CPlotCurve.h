@@ -261,9 +261,11 @@ namespace QCUSWIDGETLIB
 
 		// 设置第一个小球点
 		void setBollFirstPoint(QPointF point);
+		QPointF getBollFirstPoint() const;
 
 		// 设置第二个小球点
 		void setBollSecondPoint(QPointF point);
+		QPointF getBollSecondPoint() const;
 
 		// 设置最大X范围
 		void setMaxRangX(double maxRangX);
@@ -277,6 +279,9 @@ namespace QCUSWIDGETLIB
 
 		//
 		QCustomPlot* getPlot() const;
+
+	signals:
+			void signalMoveXValue(double firstValue, double secondValue);
 
 	private:
 		QCustomPlot* m_plot = nullptr;

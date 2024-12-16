@@ -73,6 +73,9 @@ namespace QCUSWIDGETLIB
 		void btnClickedPath();
 		void btnClickedColor();
 
+		// 选择文件夹路径
+		void btnClickedFilePath();
+
 	signals:
 		void signalLineEditChanged(QString text);
 

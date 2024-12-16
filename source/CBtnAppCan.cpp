@@ -18,6 +18,15 @@ namespace QCUSWIDGETLIB
 
 		connect(m_appBtn, &QPushButton::clicked, [=]() { emit appBtnClicked(); });
 		connect(m_canBtn, &QPushButton::clicked, [=]() { emit canBtnClicked(); });
+
+		// 设置默认样式 应用 按钮为绿色 取消 按钮为红色 悬浮时颜色加深 鼠标按下时颜色变暗
+		m_appBtn->setStyleSheet("QPushButton {background-color: #00FF00; color: white; border: 1px solid white;}"
+		"QPushButton:hover {background-color: #008000;}"
+		"QPushButton:pressed {background-color: #004000;}");
+		m_canBtn->setStyleSheet("QPushButton {background-color: #FF0000; color: white; border: 1px solid white; }"
+		"QPushButton:hover {background-color: #008000;}"
+		"QPushButton:pressed {background-color: #004000;}");
+		
 	}
 	QPushButton* CBtnAppCan::getAppBtn()
 	{
@@ -26,6 +35,33 @@ namespace QCUSWIDGETLIB
 	QPushButton* CBtnAppCan::getCanBtn()
 	{
 		return m_canBtn;
+	}
+	void CBtnAppCan::setMutualExclusive(bool mutual)
+	{
+		if (mutual)
+		{
+			m_appBtn->setCheckable(true);
+			m_canBtn->setCheckable(true);
+			m_appBtn->setChecked(false);
+			m_canBtn->setChecked(false);
+			connect(m_appBtn, &QPushButton::clicked, [=]() {
+				if (m_appBtn->isChecked())
+				{
+					m_canBtn->setChecked(false);
+				}
+			});
+			connect(m_canBtn, &QPushButton::clicked, [=]() {
+				if (m_canBtn->isChecked())
+				{
+					m_appBtn->setChecked(false);
+				}
+			});
+		}
+		else
+		{
+			m_appBtn->setCheckable(false);
+			m_canBtn->setCheckable(false);
+		}
 	}
 	void CBtnAppCan::setAppBtnText(const QString& text)
 	{
@@ -37,11 +73,19 @@ namespace QCUSWIDGETLIB
 	}
 	void CBtnAppCan::setAppBtnColor(const QColor& color)
 	{
-		m_appBtn->setStyleSheet("background-color: " + color.name() + ";");
+		m_appBtn->setStyleSheet(QString("QPushButton {background-color: %1; color: white; border: 1px solid white;}"
+			"QPushButton:hover {background-color: #008000;}"
+			"QPushButton:pressed {background-color: #004000;}").arg(color.name()));
+		
+
+		//m_appBtn->setStyleSheet("background-color: " + color.name() + ";");
 	}
 	void CBtnAppCan::setCanBtnColor(const QColor& color)
 	{
-		m_canBtn->setStyleSheet("background-color: " + color.name() + ";");
+		m_canBtn->setStyleSheet(QString("QPushButton {background-color: %1; color: white; border: 1px solid white; }"
+			"QPushButton:hover {background-color: #008000;}"
+			"QPushButton:pressed {background-color: #004000;}").arg(color.name()));
+		//m_canBtn->setStyleSheet("background-color: " + color.name() + ";");
 	}
 	void CBtnAppCan::setAppBtnClicked(const std::function<void()>& func)
 	{

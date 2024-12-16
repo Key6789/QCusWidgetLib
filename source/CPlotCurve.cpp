@@ -874,10 +874,12 @@ namespace QCUSWIDGETLIB
 			if (m_moveBoll.isFirstMoving) {
 				m_moveBoll.pointFirst.setX(x);
 				setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+				
 			}
 			if (m_moveBoll.isSecondMoving) {
 				m_moveBoll.pointSecond.setX(x);
 				setMoveBoll(m_moveBoll.pointFirst, m_moveBoll.pointSecond);
+				
 			}
 		}
 	}
@@ -970,6 +972,7 @@ namespace QCUSWIDGETLIB
 			m_moveBoll.thirdLine == nullptr) {
 			initMoveBoll();
 		}
+		emit signalMoveXValue(m_moveBoll.pointFirst.x(), m_moveBoll.pointSecond.x());
 		// 设置位置
 		m_moveBoll.secondLine->setHead(QCPLineEnding::esNone);
 		m_moveBoll.firstLine->setTail(QCPLineEnding::esDisc);
@@ -1035,9 +1038,19 @@ namespace QCUSWIDGETLIB
 		m_plot->xAxis->setRange(m_RangeX);
 	}
 
+	QPointF HistogramWidget::getBollFirstPoint() const
+	{
+		return m_moveBoll.pointFirst;
+	}
+
 	void HistogramWidget::setMinRangX(double minRangX) {
 		m_RangeX.lower = minRangX;
 		m_plot->xAxis->setRange(m_RangeX);
+	}
+
+	QPointF HistogramWidget::getBollSecondPoint() const
+	{
+		return m_moveBoll.pointSecond;
 	}
 
 	void HistogramWidget::setMaxRangY(double maxRangY) {

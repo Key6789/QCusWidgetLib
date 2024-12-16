@@ -50,12 +50,16 @@
 #include <QProgressBar>
 #include <QListWidget>
 #include "qcustomplot.h"
+
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #define __CSTRING_UTF8(x) QString::fromLocal8Bit(x)
 
 // 定义库的导出和导入宏
 
 
-#  if defined(BUILD_EXE)
+#  if (defined(BUILD_EXE) && BUILD_EXE == 1 && defined QCUSWIDGETLIB_LIBRARY )
 #    define QCUSWIDGETLIB_EXPORT 
 #  else
 	#if defined(QCUSWIDGETLIB_LIBRARY)
@@ -65,6 +69,12 @@
 	#endif  
 #  endif
 
+
+//#if defined(QCUSWIDGETLIB_LIBRARY)
+//#  define QCUSWIDGETLIB_EXPORT Q_DECL_EXPORT
+//#else
+//# define QCUSWIDGETLIB_EXPORT Q_DECL_IMPORT
+//#endif  
 
 #endif // !
 
