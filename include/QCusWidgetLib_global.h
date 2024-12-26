@@ -69,7 +69,7 @@
 	#endif  
 #  endif
 
-
+#    define QCUSWIDGETLIB_EXPORT 
 //#if defined(QCUSWIDGETLIB_LIBRARY)
 //#  define QCUSWIDGETLIB_EXPORT Q_DECL_EXPORT
 //#else

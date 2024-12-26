@@ -145,7 +145,7 @@ class QCPPolarGraph;
 #  define QCP_LIB_DECL
 #endif
 
-#  if defined(BUILD_EXE)
+#  if (defined(BUILD_EXE) && BUILD_EXE == 1 && defined QCUSWIDGETLIB_LIBRARY )
 #    define QCUSWIDGETLIB_EXPORT 
 #  else
 #if defined(QCUSWIDGETLIB_LIBRARY)

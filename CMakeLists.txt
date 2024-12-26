@@ -14,7 +14,7 @@ else()
 endif()
 
 ### 是否生成 exe
-set(BUILD_EXE false)
+set(BUILD_EXE true)
 
 #设置exe 的 main.cpp及其他 文件 路径
 set(EXE_MAIN_FILE 
@@ -72,7 +72,11 @@ if (UNIX)
     ## 
 else (WIN32)
     ## 设置Windows库的输出路径和包含路径
+    if(BUILD_EXE)
+    set(WIN_LIBRARY_OUTPUT_PATH__ROOT "D:/Soft/AtamiLib/QCusWidgetLibEXE")
+    else()
     set(WIN_LIBRARY_OUTPUT_PATH__ROOT "D:/Soft/AtamiLib/QCusWidgetLib")
+    endif()
 
      ## 当前工程所在文件夹，默认为当前CMakeLiat 所在目录
     set(PROJECT_CURRENT_PATH ${CMAKE_CURRENT_SOURCE_DIR})

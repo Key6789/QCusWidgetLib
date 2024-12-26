@@ -1,8 +1,8 @@
 #pragma once
 #ifndef CBTNAPPCAN_H_
 #define CBTNAPPCAN_H_
-#include <QWidget>
 #include "QCusWidgetLib_global.h"
+#include <QWidget>
 namespace QCUSWIDGETLIB
 {
 	// 建立一个模板类，用于继承QWidget，并添加一些共用的属性和方法

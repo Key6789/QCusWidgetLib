@@ -72,6 +72,8 @@ namespace QCUSWIDGETLIB
 		void setLayMargin(int margin);
 		void setLaySpacing(int spacing);
 		void setLayContentsMargins(int left, int top, int right, int bottom);
+		void setRowStretch(int row, int stretch);
+		void setColumnStretch(int column, int stretch);
 
 	private:
 		QGridLayout* m_pLayout = nullptr;

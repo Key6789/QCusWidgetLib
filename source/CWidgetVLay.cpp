@@ -179,6 +179,16 @@ namespace QCUSWIDGETLIB
 		m_pLayout->setContentsMargins(left, top, right, bottom);
 	}
 
+	void CWidgetGridLayout::setRowStretch(int row, int stretch)
+	{
+		m_pLayout->setRowStretch(row, stretch);
+	}
+
+	void CWidgetGridLayout::setColumnStretch(int column, int stretch)
+	{
+		m_pLayout->setColumnStretch(column, stretch);
+	}
+
 
 
 }
